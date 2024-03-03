@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<h:html xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="layout.xhtml">
+	<ui:define name="head">
+		<title>Clientes</title>
+		<link rel="stylesheet"
+			href="https://unpkg.com/primeflex@^3/primeflex.css" />
+	</ui:define>
+
+	<ui:define name="body">
+
+		<h:form id="form-cliente">
+
+			<p:growl id="mensajes" showDetail="true" />
+
+
+			<p:commandButton value="Nuevo" icon="pi pi-fw pi-plus"
+				actionListener="#{clienteController.nuevo}"
+				update=":formModalCliente:modalPanelId"
+				oncomplete="PF('modalClienteW').show()">
+			</p:commandButton>
+
+
+			<div class="card">
+				<p:dataTable value="#{clienteController.clientes}" var="cliente"
+					id="tablaClienteId" widgetVar="tablaClienteW" lazy="true">
+
+					<f:facet name="header">
+						<div
+							class="flex justify-content-center flex-wrap card-container yellow-container">
+							<h3>Clientes</h3>
+						</div>
+					</f:facet>
+
+					<p:column headerText="Codigo Cliente">
+						<h:outputText value="#{cliente.codigo}" />
+					</p:column>
+					<p:column headerText="Nombre Cliente">
+						<h:outputText value="#{cliente.nombre}" />
+					</p:column>
+					<p:column headerText="Direccion">
+						<h:outputText value="#{cliente.direccion}" />
+					</p:column>
+					<p:column>
+						<p:commandButton value="Editar" icon="pi pi-pencil"
+							update=":formModalCliente:modalPanelId"
+							oncomplete="PF('modalClienteW').show()" process="@this"
+							class="ui-button-primary" style="margin-right: .5rem">
+							<f:setPropertyActionListener
+								target="#{clienteController.clienteSeleccionado}"
+								value="#{cliente}" />
+							<p:resetInput target=":formModalCliente:modalPanelId" />
+						</p:commandButton>
+
+						<p:commandButton value="Eliminar" class="ui-button-danger"
+							icion="pi pi-trash" process="@this"
+							oncomplete="PF('eliminarConfirmarW').show()">
+							<f:setPropertyActionListener
+								target="#{clienteController.clienteSeleccionado}"
+								value="#{cliente}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+		</h:form>
+
+
+
+		<h:form id="formModalCliente">
+			<p:dialog header="Cliente" showEffect="fade" modal="true"
+				widgetVar="modalClienteW" resposive="true">
+				<p:outputPanel id="modalPanelId" class="ui-fluid">
+					<div class="field">
+						<p:outputLabel for="codigo">Codigo cliente </p:outputLabel>
+						<p:inputText id="codigo"
+							value="#{clienteController.clienteSeleccionado.codigo}"
+							disabled="true" />
+					</div>
+					<div class="field">
+						<p:outputLabel for="nombre">Nombre Cliente </p:outputLabel>
+						<p:inputText id="nombre"
+							value="#{clienteController.clienteSeleccionado.nombre}" />
+					</div>
+
+					<div class="field">
+						<p:outputLabel for="direccion">Direccion</p:outputLabel>
+						<p:inputText id="direccion"
+							value="#{clienteController.clienteSeleccionado.direccion}" />
+					</div>
+
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<p:commandButton value="Guardar" icon="pi pi-check"
+						process="modalPanelId @this"
+						actionListener="#{clienteController.guardar}" />
+
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						onclick="PF('modalClienteW').hide()" class="ui-button-secondary"
+						type="button" />
+				</f:facet>
+
+			</p:dialog>
+
+			<p:confirmDialog widgetVar="eliminarConfirmarW" showEffect="fade"
+				width="300" message="confirmacion de Eliminar ?" header="Confirmar"
+				severity="warn">
+				<p:commandButton value="Si" icon="pi pi-check"
+					actionListener="#{clienteController.eliminar}" process="@this"
+					oncomplete="PF('eliminarConfirmarW').hide()" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-button-secondary" icon="pi pi-times"
+					onclick="PF('eliminarConfirmarW').hide()" />
+			</p:confirmDialog>
+
+		</h:form>
+
+
+
+
+	</ui:define>
+</ui:composition>
+
+
+
+</h:html>

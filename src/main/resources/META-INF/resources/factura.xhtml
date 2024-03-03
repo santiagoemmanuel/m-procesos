@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<h:html xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      >
+
+
+
+<ui:composition template="layout.xhtml">
+        <ui:define name="head">
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>                    
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
+        <title>M-Procesos</title>                                                                                          
+            
+        </ui:define>
+
+        <ui:define name="body">
+        
+ 
+    
+    <h:form id="forma-c">
+    <p:growl id="mensajes" showDetail="true"/>
+    
+    			<p:commandButton value="Nuevo" icon="pi pi-fw pi-plus"
+				actionListener="#{facturaController.nuevaFactura}"
+				update=":forma-modal:cuenta-ventana"
+				oncomplete="PF('ventanaModalFac').show()">
+			</p:commandButton>                   
+ 
+    
+                <div class="card">
+                <p:dataTable value="#{facturaController.facturas}" var="factura" id="tablaFac" widgetVar="facturaTabla" lazy="true" >
+
+                    <f:facet name="header">
+                        <div class="flex justify-content-center flex-wrap card-container yellow-container">                            
+                                <h3>lista facturas</h3>                            
+                        </div>
+                    </f:facet>
+
+                    <p:column headerText="Id factura">
+                        <h:outputText value="#{factura.noFactura}"/>
+                    </p:column>
+
+                    
+                    <p:column headerText="Cliente">
+                        <h:outputText value="#{factura.codigo} #{factura.cliente.nombre} "/>                                                
+                    </p:column>
+
+                    <p:column headerText="numero de orden ">
+                        <h:outputText value="#{factura.numeroOrden}">                        
+                            
+                        </h:outputText>
+                    </p:column>
+
+ 
+                    <p:column>
+                    
+                    <p:commandButton value="prods" icon="pi pi-plus"  class="ui-button-primary" 
+                    actionListener="#{facturaController.enviarDatos}" style="margin-right: .5rem">
+                            <f:setPropertyActionListener target="#{datosBean.noFactura}" value="#{factura.noFactura}"/>                            
+                      </p:commandButton>                    
+                    
+                        <p:commandButton value="Editar" icon="pi pi-pencil" update=":forma-modal:cuenta-ventana" oncomplete="PF('ventanaModalFac').show()"
+                                         process="@this"  class="ui-button-primary" style="margin-right: .5rem">
+                            <f:setPropertyActionListener target="#{facturaController.facturaSeleccionada}" value="#{factura}"/>
+                            <p:resetInput target=":forma-modal:cuenta-ventana"/>
+                        </p:commandButton>
+
+                        <p:commandButton value="Eliminar" class="ui-button-danger" icion="pi pi-trash" 
+                                         process="@this" oncomplete="PF('eliminarFacConfirm').show()">
+                            <f:setPropertyActionListener target="#{datosBean.noFactura}" value="#{factura.noFactura}"/>
+                        </p:commandButton>
+                    </p:column> 
+
+                </p:dataTable>
+            </div>
+       </h:form>
+         
+            
+            
+            <h:form id="forma-modal">
+            <p:dialog header="Datos Factura" showEffect="fade" modal="true" widgetVar="ventanaModalFac" resposive="true">
+                <p:outputPanel id="cuenta-ventana" class="ui-fluid">
+                    <div class="field">
+                        <p:outputLabel for="noFactura">no. factura</p:outputLabel>
+                        <p:inputText id="noFactura" value="#{facturaController.facturaSeleccionada.noFactura}" disabled="true"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="codigo">codigo cliente </p:outputLabel>
+                        
+                        
+                        <p:selectOneMenu id="codigo" value="#{facturaController.facturaSeleccionada.codigo}" >
+                        <f:selectItems value="#{facturaController.clientes}"  
+                                       var="cliente" 
+                                       itemValue="#{cliente.codigo}"  
+                                       itemLabel="#{cliente.codigo} #{cliente.nombre}">
+
+                        </f:selectItems>                                                    
+                    </p:selectOneMenu>                        
+                        
+                    </div>
+                     
+					<div class="field">
+                        <p:outputLabel for="numeroOrden">numero orden</p:outputLabel>
+                        <p:inputText id="numeroOrden" value="#{facturaController.facturaSeleccionada.numeroOrden}">                        
+                        </p:inputText>
+                          
+                    </div> 
+                    
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check" process="cuenta-ventana @this" actionListener="#{facturaController.guardarFactura}"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('ventanaModalFac').hide()" class="ui-button-secondary" type="button"/>
+                </f:facet>
+
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="eliminarFacConfirm" showEffect="fade" width="300" message="confirmacion de Eliminar ?" header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" actionListener="#{facturaController.eliminar}" process="@this" oncomplete="PF('eliminarFacConfirm').hide()"/>
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('eliminarFacConfirm').hide()"/>
+            </p:confirmDialog>
+
+        </h:form>              
+
+        </ui:define>
+    </ui:composition>
+
+
+
+
+
+
+</h:html>

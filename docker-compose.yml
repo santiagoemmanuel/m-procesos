@@ -1,0 +1,71 @@
+#usado unicamente en docker local
+version: "3.9"
+services:
+  db:
+    image: mysql    
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: medbd
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+#  backend:
+#    build: .       
+#    ports:
+#      - "8091:8091"    
+#    links:
+#      - db
+#    depends_on:
+#      - db
+#      - adminer
+#    environment:      
+#      - MYSQL_HOST=db
+#    restart: unless-stopped
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#  medimgbd:
+#    image: oracleinanutshell/oracle-xe-11g:latest
+#    ports:
+#      - 1521:1521
+#    environment:
+#      - ORACLE_SID=XE
+#      - ORACLE_PWD=oracle
+#      - ORACLE_ALLOW_REMOTE=true
+
+#  medimg:
+#    build: .       
+#    ports:
+#      - "8091:8091"
+#    #command: ["sleep", "1"] ## oracla tarda en levantar el servicio de bd
+#    links:
+#      - medimgbd
+#    depends_on:
+#      - medimgbd
+#    environment:      
+#      - DB_URL=medimgbd
+#      - DB_URL2=10.14.1.41
+    

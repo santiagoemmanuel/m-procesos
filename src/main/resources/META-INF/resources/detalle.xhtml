@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<h:html xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="layout.xhtml">
+	<ui:define name="head">
+		<title></title>
+		<link rel="stylesheet"
+			href="https://unpkg.com/primeflex@^3/primeflex.css" />
+	</ui:define>
+
+	<ui:define name="body">
+
+		<h:form id="form-cliente">
+
+			<p:growl id="mensajes" showDetail="true" />
+
+
+			<p:commandButton value="Nuevo" icon="pi pi-fw pi-plus"
+				actionListener="#{detalleController.nuevoDetalle}"
+				update=":formModalCliente:modalPanelId"
+				oncomplete="PF('modalClienteW').show()">
+			</p:commandButton>
+
+
+			<div class="card">
+				<p:dataTable value="#{detalleController.factura.facDetalles}" var="producto"
+					id="tablaClienteId" widgetVar="tablaClienteW" lazy="true">
+
+					<f:facet name="header">
+						<div
+							class="flex justify-content-center flex-wrap card-container yellow-container">
+							<h3>Productos De Factura No: #{detalleController.factura.noFactura}  cliente: #{detalleController.factura.cliente.nombre}  </h3>
+						</div>
+					</f:facet>
+
+					<p:column headerText="NombreProducto">
+						<h:outputText value="#{producto.nombreProducto}" />
+					</p:column>
+					<p:column headerText="Precio">
+						<h:outputText value="#{producto.precioUnitario}" />
+					</p:column>
+					<p:column headerText="cantidad">
+						<h:outputText value="#{producto.cantidad}" />
+					</p:column>
+					<p:column>
+						<p:commandButton value="Editar" icon="pi pi-pencil"
+							update=":formModalCliente:modalPanelId"
+							oncomplete="PF('modalClienteW').show()" process="@this"
+							class="ui-button-primary" style="margin-right: .5rem">
+							<f:setPropertyActionListener
+								target="#{detalleController.clienteSeleccionado}"
+								value="#{cliente}" />
+							<p:resetInput target=":formModalCliente:modalPanelId" />
+						</p:commandButton>
+
+						<p:commandButton value="Eliminar" class="ui-button-danger"
+							icion="pi pi-trash" process="@this"
+							oncomplete="PF('eliminarConfirmarW').show()">
+							<f:setPropertyActionListener
+								target="#{detalleController.clienteSeleccionado}"
+								value="#{cliente}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+		</h:form>
+
+
+
+		<h:form id="formModalCliente">
+			<p:dialog header="Producto" showEffect="fade" modal="true"
+				widgetVar="modalClienteW" resposive="true">
+				<p:outputPanel id="modalPanelId" class="ui-fluid">
+					<div class="field">
+						<p:outputLabel for="nombreProducto">nombre producto</p:outputLabel>
+						<p:inputText id="nombreProducto"
+							value="#{detalleController.detalleNuevo.nombreProducto}"/>
+					</div>
+					<div class="field">
+						<p:outputLabel for="precio">precio</p:outputLabel>											                        
+                        <p:inputNumber id="precio" value="#{detalleController.detalleNuevo.precioUnitario}"/>
+							
+					</div>
+
+					<div class="field">
+						<p:outputLabel for="cantidad">cantidad</p:outputLabel>
+						<p:inputNumber id="cantidad" value="#{detalleController.detalleNuevo.cantidad}" />
+					</div>
+
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<p:commandButton value="Guardar" icon="pi pi-check"
+						process="modalPanelId @this"
+						actionListener="#{detalleController.guardarDetalle}" />
+
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						onclick="PF('modalClienteW').hide()" class="ui-button-secondary"
+						type="button" />
+				</f:facet>
+
+			</p:dialog>
+
+			<p:confirmDialog widgetVar="eliminarConfirmarW" showEffect="fade"
+				width="300" message="confirmacion de Eliminar ?" header="Confirmar"
+				severity="warn">
+				<p:commandButton value="Si" icon="pi pi-check"
+					actionListener="#{detalleController.eliminar}" process="@this"
+					oncomplete="PF('eliminarConfirmarW').hide()" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-button-secondary" icon="pi pi-times"
+					onclick="PF('eliminarConfirmarW').hide()" />
+			</p:confirmDialog>
+
+		</h:form>
+
+
+
+
+	</ui:define>
+</ui:composition>
+
+
+
+</h:html>

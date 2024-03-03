@@ -9,26 +9,26 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: medbd
     ports:
-      - 3306:3306
+      - 8093:3306
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8092:8080
 
-#  backend:
-#    build: .       
-#    ports:
-#      - "8091:8091"    
-#    links:
-#      - db
-#    depends_on:
-#      - db
-#      - adminer
-#    environment:      
-#      - MYSQL_HOST=db
-#    restart: unless-stopped
+  backend:
+    build: .       
+    ports:
+      - "8091:8091"    
+    links:
+      - db
+    depends_on:
+      - db
+      - adminer
+    environment:      
+      - MYSQL_HOST=db
+    restart: unless-stopped
       
 
 

@@ -7,6 +7,14 @@
 
 
 FROM maven:3.8.5-openjdk-17
+
+run export GIT_SSL_NO_VERIFY=true
+run apk add --no-cache git curl bash coreutils
+run git config --global user.email "gssantiago.dev@gmail.com"
+run git config --global user.name  "gsantiago"
+run git remote remove origin
+
+
 COPY . /usr/local/med/
 
 WORKDIR /usr/local/med/

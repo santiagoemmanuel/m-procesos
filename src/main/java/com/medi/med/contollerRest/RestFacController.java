@@ -1,4 +1,4 @@
-package com.medi.med.contoller;
+package com.medi.med.contollerRest;
 
 import java.util.List;
 import java.util.Optional; 
@@ -16,25 +16,14 @@ import com.medi.med.modelo.Factura;
 import com.medi.med.modelo.FacDetalle;
 
 
-//http://localhost:8091/med/swagger-ui/index.html 
-
-
 @CrossOrigin(origins = { "*" })
 @RequestMapping("/ws")
 @org.springframework.web.bind.annotation.RestController
-public class RestController {
+public class RestFacController {
 
 	@Autowired FacDao facDao;
 	@Autowired FacDetalleDao facDetDao;
 	
-
-	
-	// abajo Rest metodos  para acceso http 
-	
-	@GetMapping("/test") // //http://localhost:8091/med/ws/test
-	String sayHello() {
-		return "hello";
-	}
 	
 	@GetMapping("/facturas") //http://localhost:8091/med/ws/facturas
 	List<Factura> facturas() {		

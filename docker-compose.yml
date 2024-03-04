@@ -1,4 +1,4 @@
-#usado unicamente en docker local
+#usar en docker local
 version: "3.9"
 services:
   db:
@@ -9,7 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: medbd
     ports:
-      - 8093:3306
+      - 3306:3306
 
   adminer:
     image: adminer
